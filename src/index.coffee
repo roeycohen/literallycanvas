@@ -43,10 +43,10 @@ tools =
   Pan: require './tools/Pan'
   Eyedropper: require './tools/Eyedropper'
   SelectShape: require './tools/SelectShape'
+  Comment: require './tools/Comment'
 
   Tool: baseTools.Tool
   ToolWithStroke: baseTools.ToolWithStroke
-
 
 defaultTools = defaultOptions.tools
 defaultImageURLPrefix = defaultOptions.imageURLPrefix
