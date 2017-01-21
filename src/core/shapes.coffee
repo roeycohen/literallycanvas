@@ -507,69 +507,21 @@ defineShape 'Comment',
   constructor: (args={}) ->
     @x = args.x or 0
     @y = args.y or 0
-    @v = args.v or 0  # version (<1 needs position repaired)
-    @text = args.text or ''
-    @color = args.color or 'black'
-    @font  = args.font or '18px sans-serif'
-    @forcedWidth = args.forcedWidth or null
-    @forcedHeight = args.forcedHeight or null
+    @index = args.index or null
+    @width = args.width or 0
+    @height = args.height or 0
+    @strokeWidth = args.strokeWidth or 2
+    @strokeColor = args.strokeColor or 'black'
+    @fillColor = args.fillColor or 'transparent'
 
-  _makeRenderer: (ctx) ->
-    ctx.lineHeight = 1.2
-    @renderer = new TextRenderer(
-      ctx, @text, @font, @forcedWidth, @forcedHeight)
-
-    if @v < 1
-      console.log 'repairing baseline'
-      @v = 1
-      @x -= @renderer.metrics.bounds.minx
-      @y -= @renderer.metrics.leading - @renderer.metrics.descent
-
-  setText: (text) ->
-    @text = text
-    @renderer = null
-
-  setFont: (font) ->
-    @font = font
-    @renderer = null
-
-  setPosition: (x, y) ->
-    @x = x
-    @y = y
-
-  setSize: (forcedWidth, forcedHeight) ->
-    @forcedWidth = Math.max(forcedWidth, 0)
-    @forcedHeight = Math.max(forcedHeight, 0)
-    @renderer = null
-
-  enforceMaxBoundingRect: (lc) ->
-    br = @getBoundingRect(lc.ctx)
-    lcBoundingRect = {
-      x: -lc.position.x / lc.scale,
-      y: -lc.position.y / lc.scale,
-      width: lc.canvas.width / lc.scale,
-      height: lc.canvas.height / lc.scale
-    }
-    # really just enforce max width
-    if br.x + br.width > lcBoundingRect.x + lcBoundingRect.width
-      dx = br.x - lcBoundingRect.x
-      @forcedWidth = lcBoundingRect.width - dx - 10
-      @renderer = null
-
-  getBoundingRect: (ctx, isEditing=false) ->
-# if isEditing == true, add X padding to account for carat
-    unless @renderer
-      if ctx
-        @_makeRenderer(ctx)
-      else
-        throw "Must pass ctx if text hasn't been rendered yet"
-    {
-      x: Math.floor(@x), y: Math.floor(@y),
-      width: Math.ceil(@renderer.getWidth(true)),
-      height: Math.ceil(@renderer.getHeight())
-    }
-  toJSON: -> {@x, @y, @text, @color, @font, @forcedWidth, @forcedHeight, @v}
-  fromJSON: (data) -> createShape('Text', data)
+  getBoundingRect: -> {
+    x: @x - @strokeWidth / 2,
+    y: @y - @strokeWidth / 2,
+    width: @width + @strokeWidth,
+    height: @height + @strokeWidth,
+  }
+  toJSON: -> {@x, @y, @index, @width, @height, @strokeWidth, @strokeColor, @fillColor}
+  fromJSON: (data) -> createShape('Ellipse', data)
   move: ( moveInfo={} ) ->
     @x = @x - moveInfo.xDiff
     @y = @y - moveInfo.yDiff

@@ -9,6 +9,7 @@ module.exports = class Ellipse extends ToolWithStroke
   iconName: 'ellipse'
 
   begin: (x, y, lc) ->
+
     @currentShape = createShape('Ellipse', {
       x, y, @strokeWidth,
       strokeColor: lc.getColor('primary'),
