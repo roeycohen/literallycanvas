@@ -60,6 +60,7 @@ createShape = (name, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) ->
 
 
 JSONToShape = ({className, data, id}) ->
+
   if className of shapes
     shape = shapes[className].fromJSON(data)
     if shape
@@ -174,6 +175,7 @@ defineShape 'Ellipse',
     @y = args.y or 0
     @width = args.width or 0
     @height = args.height or 0
+    @name = args.name or ''
     @strokeWidth = args.strokeWidth or 1
     @strokeColor = args.strokeColor or 'black'
     @fillColor = args.fillColor or 'transparent'
@@ -184,7 +186,7 @@ defineShape 'Ellipse',
     width: @width + @strokeWidth,
     height: @height + @strokeWidth,
   }
-  toJSON: -> {@x, @y, @width, @height, @strokeWidth, @strokeColor, @fillColor}
+  toJSON: -> {@x, @y, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
   fromJSON: (data) -> createShape('Ellipse', data)
   move: ( moveInfo={} ) ->
     @x = @x - moveInfo.xDiff
@@ -507,7 +509,7 @@ defineShape 'Comment',
   constructor: (args={}) ->
     @x = args.x or 0
     @y = args.y or 0
-    @index = args.index or null
+    @name = args.name or ''
     @width = args.width or 0
     @height = args.height or 0
     @strokeWidth = args.strokeWidth or 2
@@ -520,7 +522,7 @@ defineShape 'Comment',
     width: @width + @strokeWidth,
     height: @height + @strokeWidth,
   }
-  toJSON: -> {@x, @y, @index, @width, @height, @strokeWidth, @strokeColor, @fillColor}
+  toJSON: -> {@x, @y, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
   fromJSON: (data) -> createShape('Ellipse', data)
   move: ( moveInfo={} ) ->
     @x = @x - moveInfo.xDiff

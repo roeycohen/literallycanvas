@@ -67,6 +67,7 @@ defineCanvasRenderer 'Ellipse', (ctx, shape) ->
   ctx.stroke()
 
 defineCanvasRenderer 'Comment', (ctx, shape) ->
+
   ctx.save()
   halfWidth = Math.floor(shape.width / 2)
   halfHeight = Math.floor(shape.height / 2)

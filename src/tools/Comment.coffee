@@ -5,17 +5,15 @@ module.exports = class Comment extends ToolWithStroke
 
   name: 'Comment'
   iconName: 'Comment'
-  index: 0
+  optionsStyle: 'null'
 
   begin: (x, y, lc) ->
-
-    index = ++@index
 
     x = x - 7;
     y = y - 7;
     @currentShape = createShape('Comment', {
-      index,
       x, y, 5,
+      name: @name,
       strokeColor: 'hsla(0, 100%, 42%, 1)',
       fillColor: 'hsla(0, 100%, 64%, 1)'})
 

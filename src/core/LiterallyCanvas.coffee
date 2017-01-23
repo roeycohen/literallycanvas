@@ -64,6 +64,10 @@ module.exports = class LiterallyCanvas
     # something really simple
     @setTool(new @opts.tools[0](this))
 
+    @commentToolShapes = [];
+    @isCommentToolActive = false;
+    @manageComments()
+
     @width = opts.imageSize.width or INFINITE
     @height = opts.imageSize.height or INFINITE
 
@@ -144,18 +148,36 @@ module.exports = class LiterallyCanvas
     @repaintAllLayers()
     @trigger('imageSizeChange', {@width, @height})
 
-  manageComments: ()=>
-    console.log('geadasdasd as dad');
+  manageActiveToolComments: () ->
+    if @tool and @tool.name  == "Comment"
+      @isCommentToolActive = true
+    else
+      @isCommentToolActive = false
 
+    @manageComments();
 
-  setTool: (tool) ->
+  manageComments: () ->
+
+    if !@isCommentToolActive and lc
+
+      removedComments = _.remove(lc.backgroundShapes, (shape)=>
+        shape.name == "Comment"
+      )
+      @commentToolShapes = _.merge(@commentToolShapes, removedComments);
+      @repaintLayer('background')
+    else if @isCommentToolActive and lc
+      lc.backgroundShapes = _.concat(lc.backgroundShapes, @commentToolShapes);
+      @repaintLayer('background')
+
+  setTool: (tool) =>
 
     if @tool and @tool.name == tool.name and tool.name == "Comment"
-      @manageCommments()
       @tool = null
+      @manageActiveToolComments()
       @tool?.willBecomeInactive(this)
     else
       @tool = tool
+      @manageActiveToolComments()
     @trigger('toolChange', {tool})
     if @isBound and this.tool
       @tool.didBecomeActive(this)
