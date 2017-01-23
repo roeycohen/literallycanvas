@@ -8,6 +8,7 @@ renderSnapshotToImage = require './renderSnapshotToImage'
 renderSnapshotToSVG = require './renderSnapshotToSVG'
 Pencil = require '../tools/Pencil'
 util = require './util'
+_ = require 'lodash'
 
 INFINITE = 'infinite'
 
@@ -143,19 +144,27 @@ module.exports = class LiterallyCanvas
     @repaintAllLayers()
     @trigger('imageSizeChange', {@width, @height})
 
+  manageComments: ()=>
+    console.log('geadasdasd as dad');
+
+
   setTool: (tool) ->
-    if @isBound
+
+    if @tool and @tool.name == tool.name and tool.name == "Comment"
+      @manageCommments()
+      @tool = null
       @tool?.willBecomeInactive(this)
-    @tool = tool
+    else
+      @tool = tool
     @trigger('toolChange', {tool})
-    if @isBound
+    if @isBound and this.tool
       @tool.didBecomeActive(this)
 
   setShapesInProgress: (newVal) -> @_shapesInProgress = newVal
 
   pointerDown: (x, y) ->
     p = @clientCoordsToDrawingCoords(x, y)
-    if @tool.usesSimpleAPI
+    if @tool and @tool.usesSimpleAPI
       @tool.begin p.x, p.y, this
       @isDragging = true
       @trigger("drawStart", {tool: @tool})
@@ -178,7 +187,7 @@ module.exports = class LiterallyCanvas
 
   pointerUp: (x, y) ->
     p = @clientCoordsToDrawingCoords(x, y)
-    if @tool.usesSimpleAPI
+    if @tool and @tool.usesSimpleAPI
       if @isDragging
         @tool.end p.x, p.y, this
         @isDragging = false

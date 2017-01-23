@@ -16,6 +16,7 @@ createToolButton = (tool) ->
         # and explain here. --steve)
         @props.lc.setTool(tool)
     render: ->
+
       {div, img} = React.DOM
       {imageURLPrefix, isSelected, onSelect} = @props
 
@@ -23,7 +24,7 @@ createToolButton = (tool) ->
         'lc-pick-tool': true
         'toolbar-button': true
         'thin-button': true
-        'selected': isSelected
+        'selected': isSelected and lc and lc.tool
       src = "#{imageURLPrefix}/#{imageName}.png"
       (div {
         className,
