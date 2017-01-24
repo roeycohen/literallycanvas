@@ -167,21 +167,21 @@ module.exports = class LiterallyCanvas
 
   manageComments: () ->
 
-    if !@isCommentToolActive and lc
+    if !@isCommentToolActive and this
 
-      removedComments = _.remove(lc.backgroundShapes, (shape)=>
+      removedComments = _.remove(@backgroundShapes, (shape)=>
         shape.name == "Comment"
       )
       @commentToolShapes = _.merge(@commentToolShapes, removedComments)
       localStorage.setItem('commentToolShapes', JSON.stringify(@commentToolShapes));
 
       @repaintLayer('background')
-      lc.trigger('drawingChange');
-    else if @isCommentToolActive and lc
+      @trigger('drawingChange');
+    else if @isCommentToolActive and this
 #      lc.backgroundShapes = _.concat(lc.backgroundShapes, @commentToolShapes or JSON.parse(localStorage.getItem('commentToolShapes')));
-      lc.backgroundShapes = _.concat(lc.backgroundShapes, @commentToolShapes);
+      @backgroundShapes = _.concat(@backgroundShapes, @commentToolShapes);
       @repaintLayer('background')
-      lc.trigger('drawingChange');
+      @trigger('drawingChange');
 
   setTool: (tool) =>
 
