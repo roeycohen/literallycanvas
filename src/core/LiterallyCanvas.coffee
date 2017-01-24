@@ -152,7 +152,6 @@ module.exports = class LiterallyCanvas
   prepareShapes: (shapesData) ->
     shapes = []
     _.forEach(shapesData, (shape)->
-      debugger
       shapes.push(LC.createShape('Comment', shape))
     )
     shapes
