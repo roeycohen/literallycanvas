@@ -64,7 +64,8 @@ module.exports = class LiterallyCanvas
     # something really simple
     @setTool(new @opts.tools[0](this))
 
-    @commentToolShapes = [];
+    @commentToolShapes = @prepareShapes(JSON.parse(localStorage.getItem('commentToolShapes')));
+    #@commentToolShapes = JSON.parse(localStorage.getItem('commentToolShapes')) or [];
     @isCommentToolActive = false;
     @manageComments()
 
@@ -148,6 +149,14 @@ module.exports = class LiterallyCanvas
     @repaintAllLayers()
     @trigger('imageSizeChange', {@width, @height})
 
+  prepareShapes: (shapesData) ->
+    shapes = []
+    _.forEach(shapesData, (shape)->
+      debugger
+      shapes.push(LC.createShape('Comment', shape))
+    )
+    shapes
+
   manageActiveToolComments: () ->
     if @tool and @tool.name  == "Comment"
       @isCommentToolActive = true
@@ -163,11 +172,16 @@ module.exports = class LiterallyCanvas
       removedComments = _.remove(lc.backgroundShapes, (shape)=>
         shape.name == "Comment"
       )
-      @commentToolShapes = _.merge(@commentToolShapes, removedComments);
+      @commentToolShapes = _.merge(@commentToolShapes, removedComments)
+      localStorage.setItem('commentToolShapes', JSON.stringify(@commentToolShapes));
+
       @repaintLayer('background')
+      lc.trigger('drawingChange');
     else if @isCommentToolActive and lc
+#      lc.backgroundShapes = _.concat(lc.backgroundShapes, @commentToolShapes or JSON.parse(localStorage.getItem('commentToolShapes')));
       lc.backgroundShapes = _.concat(lc.backgroundShapes, @commentToolShapes);
       @repaintLayer('background')
+      lc.trigger('drawingChange');
 
   setTool: (tool) =>
 

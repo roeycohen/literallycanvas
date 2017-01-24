@@ -55,11 +55,18 @@ defineShape = (name, props) ->
 # improve Chrome JIT perf by not using arguments object
 createShape = (name, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) ->
   s = new shapes[name](a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
-  s.id = util.getGUID()
+  if a and !a.id
+    s.id = util.getGUID()
+  else if a and a.id
+    s.id = a.id
+  else
+    s.id = util.getGUID()
   s
 
 
 JSONToShape = ({className, data, id}) ->
+
+  data.id = id if id
 
   if className of shapes
     shape = shapes[className].fromJSON(data)
@@ -176,6 +183,7 @@ defineShape 'Ellipse',
     @width = args.width or 0
     @height = args.height or 0
     @name = args.name or ''
+    @id = args.id or null
     @strokeWidth = args.strokeWidth or 1
     @strokeColor = args.strokeColor or 'black'
     @fillColor = args.fillColor or 'transparent'
@@ -186,7 +194,7 @@ defineShape 'Ellipse',
     width: @width + @strokeWidth,
     height: @height + @strokeWidth,
   }
-  toJSON: -> {@x, @y, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
+  toJSON: -> {@x, @y, @id, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
   fromJSON: (data) -> createShape('Ellipse', data)
   move: ( moveInfo={} ) ->
     @x = @x - moveInfo.xDiff
@@ -509,6 +517,7 @@ defineShape 'Comment',
   constructor: (args={}) ->
     @x = args.x or 0
     @y = args.y or 0
+    @id = args.id or null
     @name = args.name or ''
     @width = args.width or 0
     @height = args.height or 0
@@ -522,7 +531,7 @@ defineShape 'Comment',
     width: @width + @strokeWidth,
     height: @height + @strokeWidth,
   }
-  toJSON: -> {@x, @y, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
+  toJSON: -> {@x, @y, @id, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
   fromJSON: (data) -> createShape('Ellipse', data)
   move: ( moveInfo={} ) ->
     @x = @x - moveInfo.xDiff
