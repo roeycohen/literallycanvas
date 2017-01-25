@@ -10,6 +10,8 @@ Pencil = require '../tools/Pencil'
 util = require './util'
 _ = require 'lodash'
 
+shapes = require './shapes'
+
 INFINITE = 'infinite'
 
 module.exports = class LiterallyCanvas
@@ -150,11 +152,11 @@ module.exports = class LiterallyCanvas
     @trigger('imageSizeChange', {@width, @height})
 
   prepareShapes: (shapesData) ->
-    shapes = []
+    result = []
     _.forEach(shapesData, (shape)->
-      shapes.push(LC.createShape('Comment', shape))
+      result.push(shapes.createShape('Comment', shape))
     )
-    shapes
+    result
 
   manageActiveToolComments: () ->
     if @tool and @tool.name  == "Comment"
@@ -177,7 +179,6 @@ module.exports = class LiterallyCanvas
       @repaintLayer('background')
       @trigger('drawingChange');
     else if @isCommentToolActive and lc
-#      lc.backgroundShapes = _.concat(lc.backgroundShapes, @commentToolShapes or JSON.parse(localStorage.getItem('commentToolShapes')));
       @backgroundShapes = _.concat(@backgroundShapes, @commentToolShapes);
       @repaintLayer('background')
       @trigger('drawingChange');
