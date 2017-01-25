@@ -1,5 +1,6 @@
 # maybe add checks to these in the future to make sure you never double-undo or
 # double-redo
+_ = require 'lodash'
 class ClearAction
 
   constructor: (@lc, @oldShapes, @newShapes) ->
@@ -50,5 +51,16 @@ class AddShapeAction
       lc.shapes = newShapes
     @lc.repaintLayer('main')
 
+class RemoveByIdAction
 
-module.exports = {ClearAction, AddShapeAction}
+    constructor: (@lc)->
+
+    removeById: (id)->
+      removed
+      if (id)
+        removed = _.remove(@lc.shapes, (shape)->shape.id == id)
+        @lc.repaintLayer('main')
+        removed
+
+
+module.exports = {ClearAction, AddShapeAction, RemoveByIdAction}

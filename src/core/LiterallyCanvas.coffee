@@ -452,6 +452,10 @@ module.exports = class LiterallyCanvas
     @trigger('undo', {action})
     @trigger('drawingChange', {})
 
+  removeById: (id)->
+    action = new actions.RemoveByIdAction(this)
+    action.removeById(id)
+
   redo: ->
     return unless @redoStack.length
     action = @redoStack.pop()

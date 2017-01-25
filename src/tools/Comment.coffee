@@ -1,5 +1,6 @@
 {ToolWithStroke} = require './base'
 {createShape} = require '../core/shapes'
+_ = require 'lodash'
 
 module.exports = class Comment extends ToolWithStroke
 
@@ -9,19 +10,35 @@ module.exports = class Comment extends ToolWithStroke
 
   begin: (x, y, lc) ->
 
-    x = x - 7;
-    y = y - 7;
-    @currentShape = createShape('Comment', {
-      x, y, 5,
-      name: @name,
-      strokeColor: 'hsla(0, 100%, 42%, 1)',
-      fillColor: 'hsla(0, 100%, 64%, 1)'})
+    checkIfOverlaps = (shape) ->
 
-    @currentShape.width = 14
-    @currentShape.height = 14
+      if (Math.abs(shape.x - x + 7) < 7 and Math.abs(shape.y - y + 7) < 7)
+        true
+      else
+        false
 
-    lc.backgroundShapes.push(@currentShape);
-    lc.repaintLayer('background');
-    lc.trigger('drawingChange');
+    current = _.find(lc.backgroundShapes, (shape)->
+        if shape.name == 'Comment'
+          return checkIfOverlaps(shape)
+    )
+    if (!current)
+      x = x - 7;
+      y = y - 7;
+
+      @currentShape = createShape('Comment', {
+        x, y, 5,
+        name: @name,
+        strokeColor: 'hsla(0, 100%, 42%, 1)',
+        fillColor: 'hsla(0, 100%, 64%, 1)'})
+
+      @currentShape.width = 14
+      @currentShape.height = 14
+
+      lc.backgroundShapes.push(@currentShape);
+      lc.repaintLayer('background');
+      lc.trigger('drawingChange');
+      lc.trigger('add_whiteboard_point',  @currentShape)
+    else
+      lc.trigger('edit_whiteboard_point',  @currentShape.id)
 
 #    lc.saveShape(@currentShape)
