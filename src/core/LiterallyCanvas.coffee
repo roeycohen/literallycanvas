@@ -164,7 +164,7 @@ module.exports = class LiterallyCanvas
       @trigge('lc_comment_tool', @isCommentToolActive)
     else
       @isCommentToolActive = false
-      @trigge('lc_comment_tool', @isCommentToolActive)
+      @trigger('lc_comment_tool', @isCommentToolActive)
 
     @manageComments();
 
