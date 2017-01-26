@@ -107,7 +107,36 @@ registerJQueryPlugin = (_$) ->
 
 # non-browserify compatibility
 if typeof window != 'undefined'
-  window.LC = {init}
+  window.LC = {
+    init, registerJQueryPlugin, util, tools,
+    setDefaultImageURLPrefix, defaultTools,
+# @ifdef INCLUDE_GUI
+    defineOptionsStyle,
+    LiterallyCanvasReactComponent,
+# @endif
+
+    defineShape: shapes.defineShape,
+    createShape: shapes.createShape,
+    JSONToShape: shapes.JSONToShape,
+    shapeToJSON: shapes.shapeToJSON,
+
+    defineCanvasRenderer:  canvasRenderer.defineCanvasRenderer,
+    renderShapeToContext: canvasRenderer.renderShapeToContext,
+    renderShapeToCanvas: canvasRenderer.renderShapeToCanvas,
+    renderShapesToCanvas: util.renderShapes
+
+    defineSVGRenderer: svgRenderer.defineSVGRenderer,
+    renderShapeToSVG: svgRenderer.renderShapeToSVG,
+    renderShapesToSVG: util.renderShapesToSVG,
+
+    snapshotToShapes: conversion.snapshotToShapes
+    snapshotJSONToShapes: conversion.snapshotJSONToShapes
+
+    renderSnapshotToImage: renderSnapshotToImage
+    renderSnapshotToSVG: renderSnapshotToSVG
+
+    localize: localize
+  }
   if window.$
       registerJQueryPlugin(window.$)
 
