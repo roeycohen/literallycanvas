@@ -161,14 +161,16 @@ module.exports = class LiterallyCanvas
   manageActiveToolComments: () ->
     if @tool and @tool.name  == "Comment"
       @isCommentToolActive = true
+      @trigge('lc_comment_tool', @isCommentToolActive)
     else
       @isCommentToolActive = false
+      @trigge('lc_comment_tool', @isCommentToolActive)
 
     @manageComments();
 
   manageComments: () ->
 
-    if !@isCommentToolActive and lc
+    if !@isCommentToolActive and this
 
       removedComments = _.remove(@backgroundShapes, (shape)=>
         shape.name == "Comment"
@@ -178,7 +180,7 @@ module.exports = class LiterallyCanvas
 
       @repaintLayer('background')
       @trigger('drawingChange');
-    else if @isCommentToolActive and lc
+    else if @isCommentToolActive
       @backgroundShapes = _.concat(@backgroundShapes, @commentToolShapes);
       @repaintLayer('background')
       @trigger('drawingChange');

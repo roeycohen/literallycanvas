@@ -38,11 +38,12 @@ class AddShapeAction
         newShapes.push(@shape)
       @lc.shapes = newShapes
     @lc.repaintLayer('main')
+    @lc.trigger('add_whiteboard_shape', @shape)
 
   undo: ->
     # common case: it's the most recent shape
     if @lc.shapes[@lc.shapes.length-1].id == @shape.id
-      @lc.shapes.pop()
+      @lc.trigger('remove_whiteboard_shape', @lc.shapes.pop())
     # uncommon case: it's in the array somewhere
     else
       newShapes = []
@@ -59,6 +60,8 @@ class RemoveByIdAction
       removed
       if (id)
         removed = _.remove(@lc.shapes, (shape)->shape.id == id)
+        if !removed
+          removed = _.remove(@lc.backgroundShapes, (shape)->shape.id == id)
         @lc.repaintLayer('main')
         removed
 

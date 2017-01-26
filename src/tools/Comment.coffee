@@ -35,10 +35,12 @@ module.exports = class Comment extends ToolWithStroke
       @currentShape.height = 14
 
       lc.backgroundShapes.push(@currentShape);
+      lc.trigger('add_whiteboard_point',  @currentShape)
+      lc.trigger('lc_add_point',  @currentShape);
       lc.repaintLayer('background');
       lc.trigger('drawingChange');
-      lc.trigger('add_whiteboard_point',  @currentShape)
     else
-      lc.trigger('edit_whiteboard_point',  @currentShape.id)
+      lc.trigger('lc_edit_point',  @currentShape);
+#      lc.trigger('edit_whiteboard_point',  @currentShape.id)
 
 #    lc.saveShape(@currentShape)
