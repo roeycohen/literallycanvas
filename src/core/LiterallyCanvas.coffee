@@ -62,9 +62,13 @@ module.exports = class LiterallyCanvas
     @isDragging = false
     @position = {x: 0, y: 0}
     @scale = 1.0
+
     # GUI immediately replaces this value, but it's initialized so you can have
     # something really simple
-    @setTool(new @opts.tools[0](this))
+
+    @isBlocked = opts.isBlocked or false
+    if (!@isBlocked)
+      @setTool(new @opts.tools[0](this))
 
     @commentToolShapes = @prepareShapes(JSON.parse(localStorage.getItem('commentToolShapes')));
     #@commentToolShapes = JSON.parse(localStorage.getItem('commentToolShapes')) or [];
@@ -119,6 +123,15 @@ module.exports = class LiterallyCanvas
     @containerEl = null
     @isBound = false
 
+  block: (isBlock) ->
+    @isBlocked = isBlock
+    if @isBlocked
+      @tool = null
+    else
+      @setTool(new @opts.tools[0](this))
+    @trigger('blockChanged', @isBlocked)
+
+
   trigger: (name, data) ->
     @canvas.dispatchEvent(new CustomEvent(name, detail: data))
     # dispatchEvent has a boolean value that doesn't mean anything to us, so
@@ -161,7 +174,7 @@ module.exports = class LiterallyCanvas
   manageActiveToolComments: () ->
     if @tool and @tool.name  == "Comment"
       @isCommentToolActive = true
-      @trigge('lc_comment_tool', @isCommentToolActive)
+      @trigger('lc_comment_tool', @isCommentToolActive)
     else
       @isCommentToolActive = false
       @trigger('lc_comment_tool', @isCommentToolActive)

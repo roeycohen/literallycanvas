@@ -20,8 +20,27 @@ ColorPickers = React.createFactory React.createClass
 
 
 Picker = React.createClass
+
   displayName: 'Picker'
-  getInitialState: -> {selectedToolIndex: 0}
+
+  getInitialState: () ->
+
+    {lc} = @props
+
+    lc.on('blockChanged', (isBlock)=>
+      @blockChanged(isBlock)
+    )
+
+    {
+      isBlocked: lc.isBlocked
+      selectedToolIndex: 0
+    }
+
+  blockChanged: (isBlocked) ->
+    @setState({
+      isBlocked: isBlocked
+    })
+
   renderBody: ->
     {div} = React.DOM
     {toolButtonComponents, lc, imageURLPrefix} = @props
@@ -55,7 +74,9 @@ Picker = React.createClass
   render: ->
     {div} = React.DOM
     (div {className: 'lc-picker'},
-      this.renderBody()
+      console.log(this.state.isBlocked)
+      if !this.state.isBlocked
+        this.renderBody()
     )
 
 

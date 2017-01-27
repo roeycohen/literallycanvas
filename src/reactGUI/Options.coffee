@@ -5,11 +5,25 @@ createSetStateOnEventMixin = require './createSetStateOnEventMixin'
 
 Options = React.createClass
   displayName: 'Options'
-  getState: -> {
-    style: @props.lc.tool?.optionsStyle
-    tool: @props.lc.tool
-  }
-  getInitialState: -> @getState()
+  getState: ->
+    {
+      style: @props.lc.tool?.optionsStyle
+      tool: @props.lc.tool
+      isBlocked: @props.lc.isBlocked
+    }
+  getInitialState: ->
+    {lc} = @props
+
+    lc.on('blockChanged', (isBlock)=>
+      @blockChanged(isBlock)
+    )
+    @getState()
+
+  blockChanged: (isBlocked) ->
+    @setState({
+      isBlocked: isBlocked
+    })
+
   mixins: [createSetStateOnEventMixin('toolChange')]
 
   renderBody: ->
@@ -21,7 +35,8 @@ Options = React.createClass
   render: ->
     {div} = React.DOM
     (div {className: 'lc-options horz-toolbar'},
-      this.renderBody()
+      if !this.state.isBlocked
+        this.renderBody()
     )
 
 module.exports = Options
