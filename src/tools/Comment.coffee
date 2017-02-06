@@ -40,7 +40,7 @@ module.exports = class Comment extends ToolWithStroke
       lc.repaintLayer('background');
       lc.trigger('drawingChange');
     else
-      lc.trigger('lc_edit_point',  @currentShape);
+      lc.trigger('lc_edit_point',  current);
 #      lc.trigger('edit_whiteboard_point',  @currentShape.id)
 
 #    lc.saveShape(@currentShape)
