@@ -535,7 +535,7 @@ defineShape 'Comment',
     @forcedHeight = args.forcedHeight or null
 
 
-  toJSON: -> {@x, @y, @id, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
+  toJSON: -> {@x, @y, @id, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor,@text}
   fromJSON: (data) -> createShape('Comment', data)
   getBoundingRect: -> {
     x: @x - @strokeWidth / 2,

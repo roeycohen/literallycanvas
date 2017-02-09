@@ -60,10 +60,19 @@ class RemoveByIdAction
       removed
       if (id)
         removed = _.remove(@lc.shapes, (shape)->shape.id == id)
-        if !(removed.length)
-          removed = _.remove(@lc.backgroundShapes, (shape)->shape.id == id)
-        @lc.repaintAllLayers()
-        removed
+        if (removed.length)
+          lc.repaintLayer("main")
+          return removed
+
+        removed = _.remove(@lc.backgroundShapes, (shape)->shape.id == id)
+        if (removed.length)
+          lc.repaintLayer("background")
+          return removed
+
+        removed = _.remove(@lc.commentToolShapes, (shape)->shape.id == id)
+        if (removed.length)
+          lc.repaintLayer("commentTool")
+          return removed
 
 
 module.exports = {ClearAction, AddShapeAction, RemoveByIdAction}
