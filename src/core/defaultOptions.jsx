@@ -27,5 +27,9 @@ module.exports = {
     require('../tools/Pan'),
     require('../tools/Eyedropper'),
     require('../tools/Comment')
+  ],
+  toolsBlock: [
+    require('../tools/Pan'),
+    require('../tools/Comment')
   ]
 }

@@ -51,6 +51,10 @@ const LiterallyCanvas = React.createClass({
       this.lc = new LiterallyCanvasModel(this.props);
     }
 
+      this.toolBlockedButtonComponents = this.lc.opts.toolsBlock.map(ToolClass => {
+          return createToolButton(new ToolClass(this.lc));
+      });
+
     this.toolButtonComponents = this.lc.opts.tools.map(ToolClass => {
       return createToolButton(new ToolClass(this.lc));
     });
@@ -69,10 +73,10 @@ const LiterallyCanvas = React.createClass({
   },
 
   render() {
-    const { lc, toolButtonComponents, props } = this;
+    const { lc, toolButtonComponents, props, toolBlockedButtonComponents } = this;
     const { imageURLPrefix, toolbarPosition } = this.lc.opts;
     
-    const pickerProps = { lc, toolButtonComponents, imageURLPrefix };
+    const pickerProps = { lc, toolButtonComponents, imageURLPrefix,toolBlockedButtonComponents };
     const topOrBottomClassName = classSet({
       'toolbar-at-top': toolbarPosition === 'top',
       'toolbar-at-bottom': toolbarPosition === 'bottom',

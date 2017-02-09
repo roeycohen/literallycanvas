@@ -41,11 +41,16 @@ Picker = React.createClass
       isBlocked: isBlocked
     })
 
-  renderBody: ->
+  renderBody: () ->
     {div} = React.DOM
-    {toolButtonComponents, lc, imageURLPrefix} = @props
+    {lc, imageURLPrefix,toolButtonComponents,toolBlockedButtonComponents} = @props
+    if (!@state.isBlocked)
+      toolButton=toolButtonComponents
+    else
+      toolButton=toolBlockedButtonComponents
+
     (div {className: 'lc-picker-contents'},
-      toolButtonComponents.map((component, ix) =>
+      toolButton.map((component, ix) =>
         (component \
           {
             lc, imageURLPrefix,
@@ -57,7 +62,7 @@ Picker = React.createClass
           }
         )
       ),
-      if toolButtonComponents.length % 2 != 0
+      if toolButton.length % 2 != 0
         (div {className: 'toolbar-button thin-button disabled'})
       (div style: {
           position: 'absolute',
@@ -65,18 +70,16 @@ Picker = React.createClass
           left: 0,
           right: 0,
         },
-        ColorPickers({lc: @props.lc})
-        UndoRedoButtons({lc, imageURLPrefix})
+        !this.state.isBlocked&&ColorPickers({lc: @props.lc})
+        !this.state.isBlocked&&UndoRedoButtons({lc, imageURLPrefix})
         ZoomButtons({lc, imageURLPrefix})
-        ClearButton({lc})
+        !this.state.isBlocked&&ClearButton({lc})
       )
     )
   render: ->
     {div} = React.DOM
     (div {className: 'lc-picker'},
-      console.log(this.state.isBlocked)
-      if !this.state.isBlocked
-        this.renderBody()
+      this.renderBody()
     )
 
 

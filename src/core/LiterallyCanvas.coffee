@@ -46,6 +46,10 @@ module.exports = class LiterallyCanvas
     @canvas = document.createElement('canvas')
     @canvas.style['background-color'] = 'transparent'
 
+    @commentCanvas = document.createElement('canvas')
+    @commentCtx = @commentCanvas.getContext('2d')
+
+
     @buffer = document.createElement('canvas')
     @buffer.style['background-color'] = 'transparent'
     @ctx = @canvas.getContext('2d')
@@ -54,6 +58,7 @@ module.exports = class LiterallyCanvas
     @backingScale = util.getBackingScale(@ctx)
 
     @backgroundShapes = opts.backgroundShapes || []
+    @commentToolShapes = opts.commentToolShapes || []
     @_shapesInProgress = []
     @shapes = []
     @undoStack = []
@@ -70,7 +75,7 @@ module.exports = class LiterallyCanvas
     if (!@isBlocked)
       @setTool(new @opts.tools[0](this))
 
-    @commentToolShapes = @prepareShapes(JSON.parse(localStorage.getItem('commentToolShapes')));
+    #@commentToolShapes = @prepareShapes(JSON.parse(localStorage.getItem('commentToolShapes')));
     #@commentToolShapes = JSON.parse(localStorage.getItem('commentToolShapes')) or [];
     @isCommentToolActive = false;
     @manageComments()
@@ -99,6 +104,7 @@ module.exports = class LiterallyCanvas
     @containerEl.style['background-color'] = @colors.background
     @containerEl.appendChild(@backgroundCanvas)
     @containerEl.appendChild(@canvas)
+    @containerEl.appendChild(@commentCanvas)
 
     @isBound = true
 
@@ -107,7 +113,7 @@ module.exports = class LiterallyCanvas
         @repaintAllLayers()
 
     @respondToSizeChange = util.matchElementSize(
-      @containerEl, [@backgroundCanvas, @canvas], @backingScale, repaintAll)
+      @containerEl, [@backgroundCanvas, @canvas, @commentCanvas], @backingScale, repaintAll)
 
     if @watermarkImage
       @watermarkImage.onload = => @repaintLayer('background')
@@ -182,20 +188,13 @@ module.exports = class LiterallyCanvas
     @manageComments();
 
   manageComments: () ->
-
     if !@isCommentToolActive and this
-
-      removedComments = _.remove(@backgroundShapes, (shape)=>
-        shape.name == "Comment"
-      )
-      @commentToolShapes = _.merge(@commentToolShapes, removedComments)
-      localStorage.setItem('commentToolShapes', JSON.stringify(@commentToolShapes));
-
-      @repaintLayer('background')
+      @commentCanvas.style.zIndex=-1;
+      @repaintLayer('commentTool')
       @trigger('drawingChange');
     else if @isCommentToolActive
-      @backgroundShapes = _.concat(@backgroundShapes, @commentToolShapes);
-      @repaintLayer('background')
+      @commentCanvas.style.zIndex=0;
+      @repaintLayer('commentTool')
       @trigger('drawingChange');
 
   setTool: (tool) =>
@@ -299,6 +298,7 @@ module.exports = class LiterallyCanvas
     @position = {x, y}
     @keepPanInImageBounds()
     @repaintAllLayers()
+    @repaintLayer('commentTool')
     @trigger('pan', {x: @position.x, y: @position.y})
 
   zoom: (factor) ->
@@ -327,7 +327,7 @@ module.exports = class LiterallyCanvas
     @repaintLayer('background') if newImage.width
 
   repaintAllLayers: ->
-    for key in ['background', 'main']
+    for key in ['background', 'main','commentTool']
       @repaintLayer(key)
     null
 
@@ -367,6 +367,11 @@ module.exports = class LiterallyCanvas
                   @ctx, shape, {@bufferCtx, shouldOnlyDrawLatest: true})
             ), @ctx, @bufferCtx
           ), @ctx, @bufferCtx
+      when 'commentTool'
+        @commentCtx.clearRect(
+          0, 0, @canvas.width, @canvas.height)
+        retryCallback = => @repaintLayer('commentTool', true)
+        @draw(@commentToolShapes, @commentCtx, retryCallback)
 
     @trigger('repaint', {layerKey: repaintLayerKey})
 

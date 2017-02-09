@@ -60,9 +60,9 @@ class RemoveByIdAction
       removed
       if (id)
         removed = _.remove(@lc.shapes, (shape)->shape.id == id)
-        if !removed
+        if !(removed.length)
           removed = _.remove(@lc.backgroundShapes, (shape)->shape.id == id)
-        @lc.repaintLayer('main')
+        @lc.repaintAllLayers()
         removed
 
 

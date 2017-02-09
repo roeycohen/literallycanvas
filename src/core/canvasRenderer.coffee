@@ -79,13 +79,22 @@ defineCanvasRenderer 'Comment', (ctx, shape) ->
   ctx.beginPath()
   ctx.arc(0, 0, Math.abs(halfWidth), 0, Math.PI * 2)
   ctx.closePath()
-  ctx.restore()
+
 
   ctx.fillStyle = shape.fillColor
   ctx.fill()
   ctx.lineWidth = shape.strokeWidth
   ctx.strokeStyle = shape.strokeColor
   ctx.stroke()
+
+  ctx.beginPath();
+  ctx.font = shape.font;
+  ctx.fillStyle = shape.color;
+  ctx.textAlign=shape.textAlign;
+  ctx.textBaseline=shape.textBaseline;
+  ctx.fillText(shape.text,0,0)
+  ctx.closePath()
+  ctx.restore()
 
 
 defineCanvasRenderer 'SelectionBox', do ->

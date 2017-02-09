@@ -519,20 +519,30 @@ defineShape 'Comment',
     @y = args.y or 0
     @id = args.id or null
     @name = args.name or ''
+
     @width = args.width or 0
     @height = args.height or 0
     @strokeWidth = args.strokeWidth or 2
     @strokeColor = args.strokeColor or 'black'
     @fillColor = args.fillColor or 'transparent'
 
+    @text = args.text or ''
+    @color = args.color or 'black'
+    @font  = args.font or '15px Calibri'
+    @textAlign  = args.textAlign or 'center'
+    @textBaseline  = args.textBaseline or 'middle'
+    @forcedWidth = args.forcedWidth or null
+    @forcedHeight = args.forcedHeight or null
+
+
+  toJSON: -> {@x, @y, @id, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
+  fromJSON: (data) -> createShape('Comment', data)
   getBoundingRect: -> {
     x: @x - @strokeWidth / 2,
     y: @y - @strokeWidth / 2,
     width: @width + @strokeWidth,
     height: @height + @strokeWidth,
   }
-  toJSON: -> {@x, @y, @id, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor}
-  fromJSON: (data) -> createShape('Ellipse', data)
   move: ( moveInfo={} ) ->
     @x = @x - moveInfo.xDiff
     @y = @y - moveInfo.yDiff
