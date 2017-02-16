@@ -527,6 +527,7 @@ defineShape 'Comment',
     @fillColor = args.fillColor or 'transparent'
 
     @text = args.text or ''
+    @userId = args.userId or false
     @color = args.color or 'black'
     @font  = args.font or '15px Calibri'
     @textAlign  = args.textAlign or 'center'
@@ -535,7 +536,7 @@ defineShape 'Comment',
     @forcedHeight = args.forcedHeight or null
 
 
-  toJSON: -> {@x, @y, @id, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor,@text}
+  toJSON: -> {@x, @y, @id, @name, @width, @height, @strokeWidth, @strokeColor, @fillColor,@text,@userId}
   fromJSON: (data) -> createShape('Comment', data)
   getBoundingRect: -> {
     x: @x - @strokeWidth / 2,

@@ -71,7 +71,11 @@ module.exports = class LiterallyCanvas
     # GUI immediately replaces this value, but it's initialized so you can have
     # something really simple
 
-    @isBlocked = opts.isBlocked or false
+    @isBlocked = opts.isBlocked or true
+    @canAdd = opts.canAdd or false
+    @canEdit = opts.canEdit or false
+    @userId = opts.userId or false
+    @is_manager = opts.is_manager or false
     if (!@isBlocked)
       @setTool(new @opts.tools[0](this))
 
@@ -86,6 +90,8 @@ module.exports = class LiterallyCanvas
     # This will ensure that we are zoomed to @scale, panned to @position, and
     # that all layers are repainted.
     @setZoom(@scale)
+
+
 
     @loadSnapshot(opts.snapshot) if opts.snapshot
 
@@ -129,14 +135,18 @@ module.exports = class LiterallyCanvas
     @containerEl = null
     @isBound = false
 
-  block: (isBlock) ->
+  block: (isBlock,canAdd,canEdit) ->
     @isBlocked = isBlock
+    @canAdd = canAdd
+    @canEdit = canEdit
     if @isBlocked
       @tool = null
     else
       @setTool(new @opts.tools[0](this))
     @trigger('blockChanged', @isBlocked)
 
+  setUserId:(userId) ->
+    @userId = userId
 
   trigger: (name, data) ->
     @canvas.dispatchEvent(new CustomEvent(name, detail: data))
