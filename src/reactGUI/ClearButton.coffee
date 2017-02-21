@@ -17,8 +17,8 @@ ClearButton = React.createClass
       'lc-clear': true
       'toolbar-button': true
       'fat-button': true
-      'disabled': not @state.isEnabled
-    onClick = if lc.canUndo() then (=> lc.clear()) else ->
+      'disabled': false
+    onClick = if true then (=> lc.clear()) else ->
 
     (div {className, onClick}, _('Clear'))
 

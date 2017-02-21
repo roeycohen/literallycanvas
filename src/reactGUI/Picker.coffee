@@ -1,7 +1,6 @@
 React = require './React-shim'
 
 ClearButton = React.createFactory require './ClearButton'
-UndoRedoButtons = React.createFactory require './UndoRedoButtons'
 ZoomButtons = React.createFactory require './ZoomButtons'
 
 {_} = require '../core/localization'
@@ -71,7 +70,6 @@ Picker = React.createClass
           right: 0,
         },
         !this.state.isBlocked&&ColorPickers({lc: @props.lc})
-        !this.state.isBlocked&&UndoRedoButtons({lc, imageURLPrefix})
         ZoomButtons({lc, imageURLPrefix})
         !this.state.isBlocked&&ClearButton({lc})
       )

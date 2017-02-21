@@ -44,7 +44,7 @@ module.exports = class Text extends Tool
       @_clearCurrentShape(lc)
       lc.repaintLayer('main')
 
-    unsubscribeFuncs.push lc.on 'primaryColorChange', (newColor) =>
+    unsubscribeFuncs.push lc.on 'primaryColorChange', ({newColor}) =>
       return unless @currentShape
       @currentShape.color = newColor
       @_updateInputEl(lc)

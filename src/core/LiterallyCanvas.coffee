@@ -256,7 +256,7 @@ module.exports = class LiterallyCanvas
       @isDragging = false
       @trigger("lc-pointerup", {tool: @tool, x: p.x, y: p.y, rawX: x, rawY: y})
 
-  setColor: (name, color) ->
+  setColor: (name, color, isOwn=false) ->
     @colors[name] = color
     return unless @isBound
     switch name
@@ -267,7 +267,7 @@ module.exports = class LiterallyCanvas
         @repaintLayer('main')
       when 'secondary'
         @repaintLayer('main')
-    @trigger "#{name}ColorChange", @colors[name]
+    @trigger("#{name}ColorChange",{newColor:@colors[name],isOwn})
     @trigger "drawingChange" if name == 'background'
 
   getColor: (name) -> @colors[name]
