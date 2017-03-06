@@ -1,6 +1,6 @@
 # maybe add checks to these in the future to make sure you never double-undo or
 # double-redo
-_ = require 'lodash'
+_ = require 'underscore'
 class ClearAction
 
   constructor: (@lc, @oldShapes, @newShapes) ->
@@ -59,18 +59,21 @@ class RemoveByIdAction
     removeById: (id)->
       removed
       if (id)
-        removed = _.remove(@lc.shapes, (shape)->shape.id == id)
+        removed = _.filter(@lc.shapes, (shape)->shape.id == id)
         if (removed.length)
+          @lc.shapes=_.reject(@lc.shapes, (shape)->shape.id == id)
           lc.repaintLayer("main")
           return removed
 
-        removed = _.remove(@lc.backgroundShapes, (shape)->shape.id == id)
+        removed = _.filter(@lc.backgroundShapes, (shape)->shape.id == id)
         if (removed.length)
+          @lc.backgroundShapes = _.reject(@lc.backgroundShapes, (shape)->shape.id == id)
           lc.repaintLayer("background")
           return removed
 
-        removed = _.remove(@lc.commentToolShapes, (shape)->shape.id == id)
+        removed = _.filter(@lc.commentToolShapes, (shape)->shape.id == id)
         if (removed.length)
+          @lc.commentToolShapes = _.reject(@lc.commentToolShapes, (shape)->shape.id == id)
           lc.repaintLayer("commentTool")
           return removed
 

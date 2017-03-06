@@ -1,7 +1,7 @@
 {ToolWithStroke} = require './base'
 {SelectShape} = require './SelectShape'
 {createShape} = require '../core/shapes'
-_ = require 'lodash'
+_ = require 'underscore'
 
 module.exports = class Comment extends ToolWithStroke
 
@@ -24,7 +24,7 @@ module.exports = class Comment extends ToolWithStroke
       else
         false
 
-    currentShape = _.findLast(lc.commentToolShapes, (shape)->
+    currentShape = _.find(lc.commentToolShapes.reverse(), (shape)->
           return checkIfOverlaps(shape,Comment.width/2)
     )
 
