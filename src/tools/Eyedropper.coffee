@@ -21,7 +21,7 @@ module.exports = class Eyedropper extends Tool
     canvas = lc.getImage()
     newColor = getPixel(
       canvas.getContext('2d'),
-      {x: x - offset.x, y: y - offset.y})
+      {x: x , y: y })
     color = newColor or lc.getColor('background')
     if @strokeOrFill == 'stroke'
       lc.setColor('primary', newColor)
