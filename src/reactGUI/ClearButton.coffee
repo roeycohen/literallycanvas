@@ -18,7 +18,7 @@ ClearButton = React.createClass
       'toolbar-button': true
       'fat-button': true
       'disabled': false
-    onClick = if true then (=> lc.clear()) else ->
+    onClick = if true then (=> confirmWindow = confirm("Are you sure?"); confirmWindow &&lc.clear()) else ->
 
     (div {className, onClick}, _('Clear'))
 
