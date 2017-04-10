@@ -209,6 +209,8 @@ module.exports = class LiterallyCanvas
 
   setTool: (tool) =>
 
+    if @isBound
+      @tool?.willBecomeInactive(this)
     if @tool and @tool.name == tool.name and tool.name == "Comment"
       @tool = null
       @manageActiveToolComments()
