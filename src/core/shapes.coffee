@@ -139,6 +139,7 @@ defineShape 'Image',
       img = data.imageObject
     else
       img = new Image()
+      img.setAttribute('crossOrigin', "anonymous");
       img.src = data.imageSrc
     createShape('Image', {x: data.x, y: data.y, image: img, scale: data.scale})
   move: ( moveInfo={} ) ->
