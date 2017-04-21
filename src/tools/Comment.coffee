@@ -76,8 +76,8 @@ module.exports = class Comment extends ToolWithStroke
       isDrag=false;
 
       if (@canCurrentEdit)
-        @currentShape.x>(lc.opts.imageSize.width-Comment.width) && (@currentShape.x=lc.opts.imageSize.width-Comment.width);
-        @currentShape.y>(lc.opts.imageSize.height-Comment.width) && (@currentShape.y=lc.opts.imageSize.height-Comment.width);
+        @currentShape.x>(lc.width-Comment.width) && (@currentShape.x=lc.width-Comment.width);
+        @currentShape.y>(lc.height-Comment.width) && (@currentShape.y=lc.height-Comment.width);
 
         (@currentShape.x<0)&&(@currentShape.x=0);
         (@currentShape.y<0)&&(@currentShape.y=0);
