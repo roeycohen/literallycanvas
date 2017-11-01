@@ -40,7 +40,7 @@ module.exports = class Comment extends ToolWithStroke
       y = y - Comment.width/2;
 
       @currentShape = createShape('Comment', {
-        x, y, 5,
+        x, y,
         name: @name,
         userId:lc.userId,
         strokeColor: 'rgba(255, 66, 113, 1)',
@@ -59,7 +59,7 @@ module.exports = class Comment extends ToolWithStroke
     @currentShape.fillColor='rgba(255, 66, 113, 0.4)';
     @currentShape.strokeColor='rgba(255, 66, 113, 0.4)';
 
-    if (@canCurrentEdit)
+    if (@canCurrentEdit && (x != @beginPosition.x || y != @beginPosition.y))
       @currentShape.x = x-@currentShape.width/2;
       @currentShape.y = y-@currentShape.height/2;
       lc.repaintLayer('commentTool')
