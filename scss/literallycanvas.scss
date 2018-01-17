@@ -118,7 +118,7 @@ $selectedColor: lighten(#3cb0fd, 20%);
 }
 
 .literally .lc-picker {
-  z-index: 1001;
+  //z-index: 1001; //blossom removal
   border-right: $basicBorder;
 
   $buttonMargin: 2px;
